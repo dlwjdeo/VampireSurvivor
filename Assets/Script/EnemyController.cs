@@ -34,4 +34,9 @@ public class EnemyController : MonoBehaviour
         if (!isLive) return;
         _spriteRenderer.flipX = target.position.x < _rigidbody.position.x;
     }
+
+    private void OnEnable()//스크립트가 활성화 될 때 불러오는 함수
+    {
+        target = GameManager.instance.player.GetComponent<Rigidbody2D>();
+    }
 }

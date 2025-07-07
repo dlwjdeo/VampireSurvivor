@@ -11,12 +11,14 @@ public class PlayerController : MonoBehaviour
     public float speed;
     private SpriteRenderer _spriteRenderer;
     private Animator _animator;
+    public Scanner scanner;
 
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _animator = GetComponent<Animator>();
+        scanner = GetComponent<Scanner>();
     }
     
 

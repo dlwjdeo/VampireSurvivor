@@ -8,8 +8,15 @@ public class WeaponController : MonoBehaviour
     public int prefabId;
     public float damage;
     public int count;
-    public int speed;
+    public float speed;
 
+    private float timer;
+    private PlayerController playerController;
+
+    private void Awake()
+    {
+        playerController = GetComponentInParent<PlayerController>();
+    }
     public void Init()
     {
         switch (id)
@@ -18,9 +25,9 @@ public class WeaponController : MonoBehaviour
                 speed = 150;
                 Batch();
                 break;
-            case 1:
-                break;
-            case 2:
+            default:
+                speed = 0.3f;
+                
                 break;
         }
     }
@@ -47,7 +54,7 @@ public class WeaponController : MonoBehaviour
             bullet.Rotate(rotVec);
             bullet.Translate(bullet.up * 1.5f, Space.World);
 
-            bullet.GetComponent<Bullet>().Init(damage, -1); // -1 is Infinity per
+            bullet.GetComponent<Bullet>().Init(damage, -1,Vector3.zero); // -1 is Infinity per
         }
     }
 
@@ -62,6 +69,15 @@ public class WeaponController : MonoBehaviour
         {
             case 0:
                 transform.Rotate(Vector3.back * speed * Time.deltaTime);
+                break;
+            default :
+                timer += Time.deltaTime;
+
+                if(timer > speed)
+                {
+                    timer = 0;
+                    Fire();
+                }
                 break;
         }
         if (Input.GetButtonDown("Jump"))
@@ -79,5 +95,21 @@ public class WeaponController : MonoBehaviour
         {
             Batch();
         }
+    }
+
+    private void Fire()
+    {
+        if(!playerController.scanner.nearestTarget)
+            return;
+
+        Vector3 targetPos = playerController.scanner.nearestTarget.position;
+        Vector3 dir = targetPos - transform.position;
+
+        dir = dir.normalized;
+
+        Transform bullet = GameManager.instance.pool.Get(prefabId).transform;
+        bullet.position = transform.position;  
+        bullet.rotation = Quaternion.FromToRotation(Vector3.up,dir);
+        bullet.GetComponent<Bullet>().Init(damage,count,dir);
     }
 }

@@ -9560,7 +9560,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &297909685
 Transform:
   m_ObjectHideFlags: 0
@@ -9588,7 +9588,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 063f9f08a07adef4ca2ce139a8c929f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 1
+  id: 0
   prefabId: 1
   damage: 11
   count: 1
@@ -38281,7 +38281,7 @@ MonoBehaviour:
   id: 1
   prefabId: 2
   damage: 3
-  count: 0
+  count: 1
   speed: 0
 --- !u!1 &1423265883
 GameObject:

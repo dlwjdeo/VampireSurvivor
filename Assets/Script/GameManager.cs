@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
     [Header("# Game Object")]
     public PlayerController player;
     public PoolManager pool;
+    public LevelUp UILevelUp;
     private void Awake()
     {
         instance = this;
@@ -41,6 +42,7 @@ public class GameManager : MonoBehaviour
         {
             level++;
             exp = 0;
+            UILevelUp.Show();
         }
     }
 }

@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -20,16 +22,55 @@ public class GameManager : MonoBehaviour
     public PlayerController player;
     public PoolManager pool;
     public LevelUp UILevelUp;
+    public Result UIResult;
+    public GameObject enemyCleaner;
     private void Awake()
     {
         instance = this;
     }
 
-    private void Start()
+    public void GameStart()
     {
         health = maxHealth;
 
         UILevelUp.select(0);
+        Resume();
+    }
+
+    public void GameOver()
+    {
+        StartCoroutine(GameOverRoutine());
+    }
+
+    IEnumerator GameOverRoutine()
+    {
+        isLive = false;
+        yield return new WaitForSeconds(0.5f);
+
+        UIResult.gameObject.SetActive(true);
+        UIResult.Lose();
+        Stop();
+    }
+
+    public void GameVictory()
+    {
+        StartCoroutine(GameVictoryRoutine());
+    }
+
+    IEnumerator GameVictoryRoutine()
+    {
+        isLive = false;
+        enemyCleaner.SetActive(true) ;
+        yield return new WaitForSeconds(0.5f);
+
+        UIResult.gameObject.SetActive(true);
+        UIResult.Win();
+        Stop();
+    }
+
+    public void GameRetry()
+    {
+        SceneManager.LoadScene(0);
     }
 
     private void Update()
@@ -42,11 +83,15 @@ public class GameManager : MonoBehaviour
         if(gameTime > maxGameTime)
         {
             gameTime = maxGameTime;
+            GameVictory();
         }
     }
 
     public void GetExp()
     {
+        if(!isLive)
+            return; 
+
         exp++;
 
         if(exp == nextExp[Mathf.Min(level,nextExp.Length -1)])
